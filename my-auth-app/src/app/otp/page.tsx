@@ -49,7 +49,7 @@ export default function OTPLoginPage() {
             const res = await apiPost("/auth/login-via-otp", { username, code });
             const token = res.data.token;
             if (token) {
-                saveToken(token); // ✅ ذخیره در کوکی
+                saveToken(token);
                 setMsg("ورود موفق ✅ توکن ذخیره شد");
                 setMsgType("success");
             } else {
@@ -73,6 +73,12 @@ export default function OTPLoginPage() {
                 {step === "send" ? "ارسال کد" : "ورود"}
             </Button>
             <Message msg={msg} type={msgType} />
+            <p className="text-sm text-center mt-4">
+                اشتباهی اومدی؟ <a href="/login" className="text-blue-600 hover:underline">ورود با رمز</a>
+            </p>
+            <p className="text-sm text-center mt-1">
+                حساب نداری؟ <a href="/register" className="text-blue-600 hover:underline">ثبت‌نام</a>
+            </p>
         </div>
     );
 }

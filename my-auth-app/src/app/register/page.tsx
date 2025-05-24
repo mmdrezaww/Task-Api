@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
             await apiPost("/auth/send-otp", {username: phone});
             setMsg("کد ارسال شد");
-            setMsgType("");
+            setMsgType("success");
             setStep("verify");
         } catch {
             setMsg("خطا در ارسال کد");
@@ -58,9 +58,11 @@ export default function RegisterPage() {
                 password_confirmation: password,
             });
 
-            const token = res.data.token;
+            console.log("ثبت‌نام response:", res);
+            const token = res?.data;
+
             if (token) {
-                saveToken(token); // ✅ ذخیره در کوکی
+                saveToken(token);
                 setMsg("ثبت‌نام موفق ✅ توکن ذخیره شد");
                 setMsgType("success");
             } else {
@@ -73,6 +75,7 @@ export default function RegisterPage() {
         }
     };
 
+
     return (
         <div className="max-w-sm mx-auto mt-24 p-6 border rounded shadow bg-white">
             <h1 className="text-xl font-bold text-center mb-4">ثبت‌نام</h1>
@@ -81,13 +84,8 @@ export default function RegisterPage() {
                 <Input className="mt-2" placeholder="کد تایید" value={code} onChange={e => setCode(e.target.value)}/>
             )}
             {step === "register" && (
-                <Input
-                    className="mt-2"
-                    type="password"
-                    placeholder="رمز عبور"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
+                <Input className="mt-2" type="password" placeholder="رمز عبور" value={password}
+                       onChange={e => setPassword(e.target.value)}/>
             )}
             <Button
                 onClick={step === "send" ? sendOtp : step === "verify" ? verifyOtp : register}
@@ -96,6 +94,9 @@ export default function RegisterPage() {
                 {step === "send" ? "ارسال کد" : step === "verify" ? "تایید کد" : "ثبت‌نام"}
             </Button>
             <Message msg={msg} type={msgType}/>
+            <p className="text-sm text-center mt-4">
+                حساب داری؟ <a href="/login" className="text-blue-600 hover:underline">ورود با رمز</a>
+            </p>
         </div>
     );
 }
